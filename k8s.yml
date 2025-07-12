@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-concatenate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: name-concatenate
+  template:
+    metadata:
+      labels:
+        app: name-concatenate
+    spec:
+      containers:
+        - name: name-concatenate
+          image: 686754180139.dkr.ecr.ap-south-1.amazonaws.com/centime/name-concatenate:latest  # Updated line
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: name-concatenate-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: name-concatenate
+  ports:
+    - protocol: TCP
+      port: 80              # The port that the service will expose externally
+      targetPort: 8080      # The port on which the Flask app is running inside the container
